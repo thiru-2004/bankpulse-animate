@@ -1,14 +1,30 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { BankingHero } from "@/components/BankingHero";
+import { CustomerDashboard } from "@/components/CustomerDashboard";
+import { AdminDashboard } from "@/components/AdminDashboard";
+
+type UserType = 'guest' | 'customer' | 'admin';
 
 const Index = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
-  );
+  const [currentUser, setCurrentUser] = useState<UserType>('guest');
+
+  const handleLoginSuccess = (userType: 'customer' | 'admin') => {
+    setCurrentUser(userType);
+  };
+
+  const handleLogout = () => {
+    setCurrentUser('guest');
+  };
+
+  // Render appropriate component based on user type
+  switch (currentUser) {
+    case 'customer':
+      return <CustomerDashboard onLogout={handleLogout} />;
+    case 'admin':
+      return <AdminDashboard onLogout={handleLogout} />;
+    default:
+      return <BankingHero onLoginSuccess={handleLoginSuccess} />;
+  }
 };
 
 export default Index;
